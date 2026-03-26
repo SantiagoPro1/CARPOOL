@@ -67,17 +67,3 @@ Bash
 php artisan serve
 Licencia
 Este proyecto es de código abierto bajo la licencia MIT.
-
-
----
-
-### ¿Cómo aplicarlo?
-
-1. Abre tu archivo `README.md` en VS Code.
-2. Borra todo el contenido actual.
-3. Pega el código que te acabo de dar.
-4. Guarda y sube los cambios:
-   ```bash
-   git add README.md
-   git commit -m "Formato de README estilo Laravel oficial"
-   git push origin main
