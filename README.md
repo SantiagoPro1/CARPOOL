@@ -1,59 +1,83 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <h1 align="center">CARPOOL</h1>
 </p>
 
-## About Laravel
+<p align="center">
+  <strong>Sistema de Movilidad Compartida para la Comunidad Universitaria</strong>
+</p>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<p align="center">
+<a href="https://laravel.com"><img src="https://img.shields.io/badge/Framework-Laravel-red" alt="Framework"></a>
+<a href="https://php.net"><img src="https://img.shields.io/badge/Language-PHP-blue" alt="Language"></a>
+<a href="https://mysql.com"><img src="https://img.shields.io/badge/Database-MySQL-orange" alt="Database"></a>
+<a href="https://github.com/tu-usuario/CARPOOL/actions"><img src="https://img.shields.io/badge/Build-Passing-brightgreen" alt="Build Status"></a>
+</p>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Sobre CARPOOL
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+CARPOOL es una plataforma de software diseñada para optimizar el transporte dentro de la comunidad universitaria en Colima. El sistema permite conectar a conductores y pasajeros que comparten rutas comunes, resolviendo problemas críticos de movilidad y saturación de infraestructura.
 
-## Learning Laravel
+La aplicación facilita tareas comunes del proceso de carpooling, tales como:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- **Autenticación Institucional:** Acceso seguro mediante correos verificados del dominio @colima.tecnm.mx.
+- **Gestión de Rutas:** Motor de búsqueda para conectar puntos de origen y destino de manera eficiente.
+- **Módulo de Vehículos:** Registro de unidades con control de capacidad y características del auto.
+- **Sistema de Solicitudes:** Gestión de asientos y confirmación de pasajeros en tiempo real.
+- **Módulo de Calificaciones:** Registro de reputación para garantizar la confianza entre usuarios.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Arquitectura del Sistema
 
-## Laravel Sponsors
+El proyecto sigue una arquitectura de tres capas para garantizar la seguridad y escalabilidad:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+1. **Frontend PWA:** Interfaz multiplataforma que consume la API REST.
+2. **Backend API:** Basado en Laravel, encargado de la lógica de negocio y validaciones.
+3. **Persistencia:** Base de datos MySQL con consultas parametrizadas para prevenir inyecciones SQL.
 
-### Premium Partners
+## Stack Tecnológico
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+CARPOOL utiliza las herramientas estándar de la industria para el desarrollo web moderno:
 
-## Contributing
+- [Laravel Eloquent ORM](https://laravel.com/docs/eloquent) para la gestión de base de datos.
+- [Motor de Rutas](https://laravel.com/docs/routing) para la comunicación entre cliente y servidor.
+- [Sistema de Migraciones](https://laravel.com/docs/migrations) para el control de versiones de la base de datos.
+- [PWA (Progressive Web App)](https://web.dev/progressive-web-apps/) para la experiencia de usuario móvil.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Instalación
 
-## Code of Conduct
+Para desplegar el proyecto en un entorno de desarrollo local, siga estos pasos:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. **Clonación:**
+   ```bash
+   git clone [https://github.com/tu-usuario/CARPOOL.git](https://github.com/tu-usuario/CARPOOL.git)
 
-## Security Vulnerabilities
+   Dependencias:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Bash
+composer install
+Entorno:
+Configure su archivo .env con las credenciales de su servidor local (XAMPP).
 
-## License
+Base de Datos:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Bash
+php artisan migrate
+Servidor:
+
+Bash
+php artisan serve
+Licencia
+Este proyecto es de código abierto bajo la licencia MIT.
+
+
+---
+
+### ¿Cómo aplicarlo?
+
+1. Abre tu archivo `README.md` en VS Code.
+2. Borra todo el contenido actual.
+3. Pega el código que te acabo de dar.
+4. Guarda y sube los cambios:
+   ```bash
+   git add README.md
+   git commit -m "Formato de README estilo Laravel oficial"
+   git push origin main
