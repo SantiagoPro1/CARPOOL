@@ -50,19 +50,19 @@ Para desplegar el proyecto en un entorno de desarrollo local, siga estos pasos:
    ```bash
    git clone [https://github.com/tu-usuario/CARPOOL.git](https://github.com/tu-usuario/CARPOOL.git)
 
-   Dependencias:
-Bash
-composer install
-Entorno:
-Configure su archivo .env con las credenciales de su servidor local (XAMPP).
+2. **Dependencias:**
+    ```bash
+    composer install
 
-Base de Datos:MySQL
+3. **Entorno:**
+   ```bash
+    Configure su archivo .env con las credenciales de su servidor local (XAMPP).
 
-Bash
-php artisan migrate
-Servidor:
+5. **Base de Datos:**
+   ```bash
+    php artisan migrate
 
-Bash
-php artisan serve
-Licencia
-Este proyecto es de código abierto bajo la licencia MIT.
+5. **Servidor:**
+    ```bash
+    php artisan serve
+
