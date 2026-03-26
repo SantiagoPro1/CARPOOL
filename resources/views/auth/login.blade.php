@@ -1,11 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<div style="display: flex; flex-direction: column; justify-content: center; min-height: 80vh;">
-    <div class="text-center mb-6">
-        <h1 class="auth-logo">CARPOOL</h1>
-        <p style="color: var(--text-muted);">TecNM Campus Colima</p>
-    </div>
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 85vh;">
+    <div class="auth-card">
+        <div class="text-center mb-6">
+            <h1 class="auth-logo">CARPOOL</h1>
+            <p style="color: var(--text-muted);">TecNM Campus Colima</p>
+        </div>
 
     @if ($errors->any())
         <div class="alert alert-error">
@@ -32,10 +33,11 @@
         <button type="submit" class="btn">INICIAR SESIÓN</button>
     </form>
 
-    <div class="text-center mt-4">
-        <p style="color: var(--text-muted); font-size: 0.875rem;">
-            ¿No tienes cuenta? <a href="{{ route('register') }}" style="color: var(--primary-color); text-decoration: none;">Regístrate</a>
-        </p>
+        <div class="text-center mt-4">
+            <p style="color: var(--text-muted); font-size: 0.875rem;">
+                ¿No tienes cuenta? <a href="{{ route('register') }}" style="color: var(--primary-color); text-decoration: none;">Regístrate</a>
+            </p>
+        </div>
     </div>
 </div>
 @endsection

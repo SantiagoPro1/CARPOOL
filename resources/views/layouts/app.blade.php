@@ -21,7 +21,7 @@
 <body>
     
     <!-- Shell Container for PWA layout -->
-    <div class="app-container">
+    <div class="app-container {{ request()->routeIs('login', 'register') ? 'auth-mode' : '' }}">
         <!-- Contenido dinámico -->
         <main class="main-content">
             @yield('content')

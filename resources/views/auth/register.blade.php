@@ -1,11 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<div>
-    <div class="text-center mb-6" style="margin-top: 20px;">
-        <h2 class="auth-logo" style="font-size: 2rem;">REGISTRO</h2>
-        <p style="color: var(--text-muted);">Únete a la comunidad de Carpool</p>
-    </div>
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 85vh; padding-top: 20px; padding-bottom: 20px;">
+    <div class="auth-card">
+        <div class="text-center mb-6">
+            <h2 class="auth-logo" style="font-size: 2rem;">REGISTRO</h2>
+            <p style="color: var(--text-muted);">Únete a la comunidad de Carpool</p>
+        </div>
 
     @if ($errors->any())
         <div class="alert alert-error">
@@ -46,7 +47,8 @@
         </div>
 
         <button type="submit" class="btn mb-4">REGISTRARME</button>
-        <a href="{{ route('login') }}" class="btn btn-outline">Ya tengo cuenta</a>
+        <a href="{{ route('login') }}" class="btn btn-outline" style="text-align: center; text-decoration: none; display: flex; justify-content: center;">Ya tengo cuenta</a>
     </form>
+    </div>
 </div>
 @endsection
