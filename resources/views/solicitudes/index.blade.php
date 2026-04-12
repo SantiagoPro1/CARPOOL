@@ -8,7 +8,7 @@
     </div>
 
     @if (session('success'))
-        <div class="alert" style="background: rgba(34, 197, 94, 0.1); color: var(--success-color); border: 1px solid rgba(34, 197, 94, 0.2);">
+        <div class="alert alert-success">
             {{ session('success') }}
         </div>
     @endif
@@ -27,10 +27,10 @@
     @foreach($viajes as $viaje)
         @if($viaje->solicitudes->where('IdEstado', 1)->count() > 0)
             @php $haySolicitudes = true; @endphp
-            <div class="card" style="border-top: 4px solid var(--primary-color);">
-                <div style="margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
-                    <h3 style="font-size: 1rem; margin-bottom: 4px;">Viaje: {{ $viaje->ruta->origen->Nombre ?? 'Origen' }} &rarr; {{ $viaje->ruta->destino->Nombre ?? 'Destino' }}</h3>
-                    <p style="color: var(--text-muted); font-size: 0.875rem;">Fecha: {{ \Carbon\Carbon::parse($viaje->FechaSalida)->format('d/m/Y h:i A') }} | Asientos libres: {{ $viaje->AsientosDisponibles }}</p>
+            <div class="card" style="border-left: 4px solid var(--blue-primary); padding-top: 16px;">
+                <div style="margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+                    <h3 style="font-size: 1rem; margin-bottom: 4px; color: var(--text-bright);">{{ $viaje->ruta->origen->Nombre ?? 'Origen' }} &rarr; {{ $viaje->ruta->destino->Nombre ?? 'Destino' }}</h3>
+                    <p style="color: var(--text-muted); font-size: 0.8rem;">{{ \Carbon\Carbon::parse($viaje->FechaSalida)->format('d/m/Y h:i A') }} | Asientos libres: {{ $viaje->AsientosDisponibles }}</p>
                 </div>
 
                 @foreach($viaje->solicitudes->where('IdEstado', 1) as $solicitud)
@@ -44,13 +44,13 @@
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="accion" value="rechazar">
-                                <button type="submit" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem; color: var(--error-color); border-color: rgba(239, 68, 68, 0.3);">Rechazar</button>
+                                <button type="submit" class="btn btn-outline" style="padding: 8px 12px; font-size: 0.75rem; color: var(--danger-text); border-color: var(--danger-soft);">Rechazar</button>
                             </form>
                             <form method="POST" action="{{ route('solicitudes.update', $solicitud) }}">
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="accion" value="aceptar">
-                                <button type="submit" class="btn" style="padding: 6px 12px; font-size: 0.8rem; background: var(--success-color);">Aceptar</button>
+                                <button type="submit" class="btn" style="padding: 8px 16px; font-size: 0.75rem; background: var(--blue-primary); width: auto;">Aceptar</button>
                             </form>
                         </div>
                     </div>

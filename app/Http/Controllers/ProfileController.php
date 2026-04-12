@@ -17,7 +17,8 @@ class ProfileController extends Controller
         $calificacion = number_format($usuario->calificacionesRecibidas()->avg('Estrellas') ?? 0, 1);
         $totalCalificaciones = $usuario->calificacionesRecibidas()->count();
         $vehiculos = $usuario->vehiculos;
+        $resenas = $usuario->calificacionesRecibidas()->with(['emisor', 'viaje'])->latest('FechaCreacion')->get();
 
-        return view('profile.show', compact('usuario', 'calificacion', 'totalCalificaciones', 'vehiculos'));
+        return view('profile.show', compact('usuario', 'calificacion', 'totalCalificaciones', 'vehiculos', 'resenas'));
     }
 }

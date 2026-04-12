@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 85vh;">
+<div class="animate-up" style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 85vh;">
     <div class="auth-card">
         <div class="text-center mb-6">
             <h1 class="auth-logo">CARPOOL</h1>
-            <p style="color: var(--text-muted);">TecNM Campus Colima</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem; font-weight: 500; letter-spacing: 0.05em;">TECNM CAMPUS COLIMA</p>
         </div>
 
     @if ($errors->any())
         <div class="alert alert-error">
-            <ul style="list-style: none; padding: 0;">
+            <ul class="error-list">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -26,16 +26,18 @@
         </div>
 
         <div class="form-group mb-6">
-            <label class="form-label" for="Contrasena">Contraseña</label>
-            <input type="password" id="Contrasena" name="Contrasena" class="form-control" required>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <label class="form-label" for="Contrasena" style="margin-bottom: 0;">Contraseña</label>
+            </div>
+            <input type="password" id="Contrasena" name="Contrasena" class="form-control" placeholder="••••••••" required>
         </div>
 
         <button type="submit" class="btn">INICIAR SESIÓN</button>
     </form>
 
         <div class="text-center mt-4">
-            <p style="color: var(--text-muted); font-size: 0.875rem;">
-                ¿No tienes cuenta? <a href="{{ route('register') }}" style="color: var(--primary-color); text-decoration: none;">Regístrate</a>
+            <p style="color: var(--text-muted); font-size: 0.85rem; font-weight: 500;">
+                ¿Eres nuevo aquí? <a href="{{ route('register') }}" style="color: var(--blue-bright); text-decoration: none; font-weight: 700;">Crea una cuenta</a>
             </p>
         </div>
     </div>

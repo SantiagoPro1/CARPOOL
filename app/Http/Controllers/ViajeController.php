@@ -15,15 +15,34 @@ class ViajeController extends Controller
     {
         $usuario = Auth::user();
         $viajes = Viaje::where('IdConductor', $usuario->IdUsuario)->orderBy('FechaSalida', 'asc')->get();
-        return view('viajes.index', compact('viajes'));
+        $viajesPasajero = $usuario->viajesComoPasajero()->orderBy('FechaSalida', 'asc')->get();
+        
+        return view('viajes.index', compact('viajes', 'viajesPasajero'));
+    }
+
+    public function update(Request $request, Viaje $viaje)
+    {
+        $usuario = Auth::user();
+        if ($viaje->IdConductor != $usuario->IdUsuario) {
+            abort(403, 'Solo el conductor puede actualizar el estado del viaje.');
+        }
+
+        $request->validate([
+            'IdEstado' => 'required|integer|in:1,2,3,4',
+        ]);
+
+        $viaje->update([
+            'IdEstado' => $request->IdEstado
+        ]);
+
+        return back()->with('success', 'Estado del viaje actualizado correctamente.');
     }
 
     public function create()
     {
         $usuario = Auth::user();
         $vehiculos = $usuario->vehiculos;
-        // In a real scenario, this would have a seeder.
-        // If empty, user can still see the form but selects will be empty.
+        // Ubicaciones disponibles para los selectores de origen y destino
         $ubicaciones = Ubicacion::all();
         
         return view('viajes.create', compact('vehiculos', 'ubicaciones'));
@@ -31,6 +50,7 @@ class ViajeController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'IdOrigen' => 'required',
             'IdDestino' => 'required|different:IdOrigen',
@@ -42,7 +62,7 @@ class ViajeController extends Controller
 
         $usuario = Auth::user();
 
-        // Check if Ruta exists or create it
+        // Buscar si la ruta ya existe o crearla
         $ruta = Ruta::firstOrCreate([
             'IdOrigen' => $request->IdOrigen,
             'IdDestino' => $request->IdDestino,
@@ -57,7 +77,7 @@ class ViajeController extends Controller
             'AsientosDisponibles' => $request->AsientosTotales,
             'PrecioPorPasajero' => $request->PrecioPorPasajero,
             'Notas' => $request->Notas,
-            'IdEstado' => 1, // 1: Publicado
+            'IdEstado' => 1, // Publicado
         ]);
 
         return redirect()->route('dashboard')->with('success', '¡Viaje publicado exitosamente!');

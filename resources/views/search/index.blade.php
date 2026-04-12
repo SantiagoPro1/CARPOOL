@@ -32,13 +32,13 @@
     </form>
 
     @if (session('success'))
-        <div class="alert" style="background: rgba(34, 197, 94, 0.1); color: var(--success-color); border: 1px solid rgba(34, 197, 94, 0.2);">
+        <div class="alert alert-success">
             {{ session('success') }}
         </div>
     @endif
     @if ($errors->any())
         <div class="alert alert-error">
-            <ul style="padding-left: 20px; list-style-type: decimal;">
+            <ul class="error-list">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach

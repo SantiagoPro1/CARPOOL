@@ -33,7 +33,7 @@ class SolicitudController extends Controller
             'IdViaje' => $viaje->IdViaje,
             'IdUsuario' => $usuario->IdUsuario,
             'AsientosSolicitados' => 1,
-            'IdEstado' => 1, // 1: Pendiente
+            'IdEstado' => 1, // Pendiente
         ]);
 
         return redirect()->route('search.index')->with('success', 'Solicitud enviada al conductor. Espera su respuesta.');
@@ -44,7 +44,7 @@ class SolicitudController extends Controller
     {
         $usuario = Auth::user();
 
-        // Obtener todos los viajes del conductor que están activos y sus solicitudes pendientes
+        // Obtener todos los viajes del conductor activos y sus solicitudes pendientes
         $viajes = Viaje::with(['solicitudes.usuario'])
             ->where('IdConductor', $usuario->IdUsuario)
             ->where('IdEstado', 1) // Publicado
@@ -53,14 +53,14 @@ class SolicitudController extends Controller
         return view('solicitudes.index', compact('viajes'));
     }
 
-    // Para el conductor: aceptar o rechazar
+    // Para el conductor: aceptar o rechazar solicitud
     public function update(Request $request, SolicitudViaje $solicitud)
     {
         $request->validate([
             'accion' => 'required|in:aceptar,rechazar',
         ]);
 
-        // Asegurar que el usuario autenticado es el conductor del viaje
+        // Verificar que el usuario autenticado es el conductor del viaje
         $viaje = $solicitud->viaje;
         if ($viaje->IdConductor !== Auth::id()) {
             abort(403);

@@ -21,10 +21,13 @@ class ChatController extends Controller
             abort(403, 'No tienes acceso a este chat. Solo participantes confirmados.');
         }
 
-        $mensajes = Mensaje::with('usuario')
+        $mensajes = Mensaje::with('remitente')
             ->where('IdViaje', $viaje->IdViaje)
             ->orderBy('FechaEnvio', 'asc')
             ->get();
+
+        // Marcar el chat como leído guardando la fecha actual en la sesión
+        session(['chat_leido_' . $viaje->IdViaje => now()]);
 
         return view('chat.show', compact('viaje', 'mensajes'));
     }
@@ -45,7 +48,7 @@ class ChatController extends Controller
 
         Mensaje::create([
             'IdViaje' => $viaje->IdViaje,
-            'IdUsuario' => $usuario->IdUsuario,
+            'IdRemitente' => $usuario->IdUsuario,
             'Contenido' => $request->Contenido,
         ]);
 

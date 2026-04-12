@@ -16,9 +16,9 @@
             <p style="text-align: center; color: var(--text-muted); margin: auto;">No hay mensajes aún. ¡Comienza a comunicarte para planear el viaje!</p>
         @else
             @foreach($mensajes as $msg)
-                @php $esMio = $msg->IdUsuario == Auth::id(); @endphp
+                @php $esMio = $msg->IdRemitente == Auth::id(); @endphp
                 <div style="display: flex; flex-direction: column; align-items: {{ $esMio ? 'flex-end' : 'flex-start' }};">
-                    <span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 2px;">{{ $msg->usuario->NombreCompleto ?? 'Usuario' }}</span>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 2px;">{{ $msg->remitente->NombreCompleto ?? 'Usuario' }}</span>
                     <div style="background: {{ $esMio ? 'var(--primary-color)' : 'rgba(255,255,255,0.1)' }}; color: #fff; padding: 8px 12px; border-radius: {{ $esMio ? '16px 16px 4px 16px' : '16px 16px 16px 4px' }}; max-width: 85%; font-size: 0.95rem;">
                         {{ $msg->Contenido }}
                     </div>

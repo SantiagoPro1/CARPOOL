@@ -17,7 +17,7 @@ class Mensaje extends Model
 
     protected $fillable = [
         'IdViaje',
-        'IdUsuario',
+        'IdRemitente',
         'Contenido',
     ];
 
@@ -28,8 +28,8 @@ class Mensaje extends Model
         return $this->belongsTo(Viaje::class, 'IdViaje', 'IdViaje');
     }
 
-    public function usuario()
+    public function remitente()
     {
-        return $this->belongsTo(Usuario::class, 'IdUsuario', 'IdUsuario');
+        return $this->belongsTo(Usuario::class, 'IdRemitente', 'IdUsuario');
     }
 }

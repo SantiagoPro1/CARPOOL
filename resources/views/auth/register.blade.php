@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 85vh; padding-top: 20px; padding-bottom: 20px;">
+<div class="animate-up" style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 85vh; padding-top: 40px; padding-bottom: 40px;">
     <div class="auth-card">
         <div class="text-center mb-6">
-            <h2 class="auth-logo" style="font-size: 2rem;">REGISTRO</h2>
-            <p style="color: var(--text-muted);">Únete a la comunidad de Carpool</p>
+            <h2 class="auth-logo" style="font-size: 2.2rem; letter-spacing: -0.05em;">REGISTRO</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; font-weight: 500;">Únete a la nueva red de Carpool TecNM</p>
         </div>
 
     @if ($errors->any())
         <div class="alert alert-error">
-            <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.875rem;">
+            <ul class="error-list">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -23,22 +23,22 @@
         
         <div class="form-group">
             <label class="form-label" for="NombreCompleto">Nombre Completo</label>
-            <input type="text" id="NombreCompleto" name="NombreCompleto" class="form-control" value="{{ old('NombreCompleto') }}" required>
+            <input type="text" id="NombreCompleto" name="NombreCompleto" class="form-control" placeholder="Juan Pérez" value="{{ old('NombreCompleto') }}" required>
         </div>
 
         <div class="form-group">
-            <label class="form-label" for="Correo">Correo Institucional (@colima.tecnm.mx)</label>
-            <input type="email" id="Correo" name="Correo" class="form-control" placeholder="ejemplo@colima.tecnm.mx" value="{{ old('Correo') }}" required>
+            <label class="form-label" for="Correo">Correo Institucional</label>
+            <input type="email" id="Correo" name="Correo" class="form-control" placeholder="usuario@colima.tecnm.mx" value="{{ old('Correo') }}" required>
         </div>
         
         <div class="form-group">
             <label class="form-label" for="Telefono">Teléfono (Opcional)</label>
-            <input type="tel" id="Telefono" name="Telefono" class="form-control" value="{{ old('Telefono') }}">
+            <input type="tel" id="Telefono" name="Telefono" class="form-control" placeholder="312 000 0000" value="{{ old('Telefono') }}">
         </div>
 
         <div class="form-group">
             <label class="form-label" for="Contrasena">Contraseña</label>
-            <input type="password" id="Contrasena" name="Contrasena" class="form-control" required>
+            <input type="password" id="Contrasena" name="Contrasena" class="form-control" placeholder="Mín. 8 caracteres" required>
         </div>
         
         <div class="form-group mb-6">
@@ -46,8 +46,8 @@
             <input type="password" id="Contrasena_confirmation" name="Contrasena_confirmation" class="form-control" required>
         </div>
 
-        <button type="submit" class="btn mb-4">REGISTRARME</button>
-        <a href="{{ route('login') }}" class="btn btn-outline" style="text-align: center; text-decoration: none; display: flex; justify-content: center;">Ya tengo cuenta</a>
+        <button type="submit" class="btn mb-4">CREAR MI CUENTA</button>
+        <a href="{{ route('login') }}" class="btn btn-outline" style="font-size: 0.9rem;">Ya tengo acceso</a>
     </form>
     </div>
 </div>
