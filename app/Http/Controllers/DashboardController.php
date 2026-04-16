@@ -26,12 +26,23 @@ class DashboardController extends Controller
         })->where('IdEstado', 1)->count();
         $calificacion = number_format($usuario->calificacionesRecibidas()->avg('Estrellas') ?? 0, 1);
 
+        $viajesTerminados = Viaje::where('IdConductor', $usuario->IdUsuario)
+            ->where('IdEstado', 3) // Finalizado
+            ->get();
+            
+        $gananciasTotales = 0;
+        foreach ($viajesTerminados as $v) {
+            $asientosOcupados = $v->AsientosTotales - $v->AsientosDisponibles;
+            $gananciasTotales += $asientosOcupados * $v->PrecioPorPasajero;
+        }
+
         return view('dashboard', compact(
             'usuario', 
             'viajesComoConductor', 
             'viajesComoPasajero', 
             'solicitudesPendientes', 
-            'calificacion'
+            'calificacion',
+            'gananciasTotales'
         ));
     }
 }

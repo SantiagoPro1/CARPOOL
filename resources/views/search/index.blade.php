@@ -77,11 +77,20 @@
                         <span style="color: var(--text-muted);">Lugares:</span> <strong>{{ $viaje->AsientosDisponibles }}</strong>
                     </div>
                 </div>
-                
-                <form method="POST" action="{{ route('solicitudes.store', $viaje) }}" style="width: 100%;">
+                @if($viaje->AsientosDisponibles > 0)
+                <form method="POST" action="{{ route('solicitudes.store', $viaje) }}" style="width: 100%; border-top: 1px solid var(--border); padding-top: 12px;">
                     @csrf
-                    <button type="submit" class="btn btn-outline" style="padding: 8px 12px; font-size: 0.875rem; width: 100%;">Enviar Solicitud</button>
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                        <input type="number" name="AsientosSolicitados" value="1" min="1" max="{{ $viaje->AsientosDisponibles }}" class="form-control" style="width: 80px;" required title="Asientos a reservar">
+                        <input type="text" name="CorreosInvitados" placeholder="Correos amigos (opcional, comas)" class="form-control" style="flex: 1; font-size: 0.8rem;">
+                    </div>
+                    <button type="submit" class="btn btn-outline" style="padding: 8px 12px; font-size: 0.875rem; width: 100%;">Reservar</button>
                 </form>
+                @else
+                <div style="text-align: center; color: var(--danger-text); padding: 8px; font-weight: bold;">
+                    Lleno o Cancelado
+                </div>
+                @endif
             </div>
         @endforeach
     @endif

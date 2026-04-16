@@ -28,6 +28,7 @@
     </div>
 
     <!-- Enviar Mensaje -->
+    @if(in_array($viaje->IdEstado, [1, 2]))
     <form method="POST" action="{{ route('chat.store', $viaje) }}" style="display: flex; gap: 8px;">
         @csrf
         <input type="text" name="Contenido" class="form-control" placeholder="Escribe un mensaje..." required style="flex: 1;" autocomplete="off" autofocus>
@@ -35,5 +36,10 @@
             <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
         </button>
     </form>
+    @else
+    <div style="text-align: center; padding: 16px; background: rgba(255,255,255,0.05); border-radius: 8px; color: var(--text-muted); font-size: 0.9rem;">
+        Chat cerrado. El viaje ha concluido o fue cancelado.
+    </div>
+    @endif
 </div>
 @endsection

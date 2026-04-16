@@ -25,15 +25,68 @@ class SolicitudController extends Controller
             return back()->withErrors(['Ya tienes una solicitud activa para este viaje.']);
         }
 
-        if ($viaje->AsientosDisponibles < 1) {
-            return back()->withErrors(['Este viaje ya no tiene asientos disponibles.']);
+        if ($viaje->IdConductor == $usuario->IdUsuario) {
+            return back()->withErrors(['No puedes unirte a tu propio viaje.']);
+        }
+
+        $request->validate([
+            'AsientosSolicitados' => 'required|integer|min:1|max:' . $viaje->AsientosDisponibles,
+            'CorreosInvitados' => 'nullable|string|max:200'
+        ]);
+
+        if ($viaje->AsientosDisponibles < $request->AsientosSolicitados) {
+            return back()->withErrors(['Este viaje no tiene suficientes asientos disponibles.']);
+        }
+
+        $correosValidos = [];
+        if ($request->CorreosInvitados) {
+            $correosArray = array_map('trim', explode(',', $request->CorreosInvitados));
+            foreach ($correosArray as $c) {
+                if ($c == $usuario->Correo) {
+                    return back()->withErrors(['No te puedes agregar a ti mismo como acompañante. Ya estás incluido al enviar la solicitud.']);
+                }
+                $userCheck = \App\Models\Usuario::where('Correo', $c)->first();
+                if (!$userCheck) {
+                    return back()->withErrors(["El acompañante $c no ha creado cuenta en la plataforma."]);
+                }
+                $correosValidos[] = $c;
+            }
+        }
+
+        $horaSalida = \Carbon\Carbon::parse($viaje->FechaSalida);
+        $horaInicio = (clone $horaSalida)->subHours(1);
+        $horaFin = (clone $horaSalida)->addHours(1);
+
+        if ($request->AsientosSolicitados < count($correosValidos) + 1) {
+            return back()->withErrors(['Estás cediendo asientos a ' . count($correosValidos) . ' acompañante(s), por lo que en la cajita numérica debes reservar al menos ' . (count($correosValidos) + 1) . ' lugares (incluyéndote a ti).']);
+        }
+
+        $empalmeComoConductor = Viaje::where('IdConductor', $usuario->IdUsuario)
+            ->whereIn('IdEstado', [1, 2])
+            ->whereBetween('FechaSalida', [$horaInicio, $horaFin])
+            ->exists();
+            
+        $empalmeComoPasajero = $usuario->viajesComoPasajero()
+            ->whereIn('Viajes.IdEstado', [1, 2])
+            ->whereBetween('Viajes.FechaSalida', [$horaInicio, $horaFin])
+            ->exists();
+
+        if ($empalmeComoConductor || $empalmeComoPasajero) {
+            return back()->withErrors(['No puedes unirte a este viaje porque ya tienes otro programado en un margen de ±1 hora.']);
+        }
+
+        $mensajeStr = 'Hola, me gustaría unirme a tu viaje.';
+        if (!empty($correosValidos)) {
+            $mensajeStr = 'Invitados: ' . implode(', ', $correosValidos);
         }
 
         SolicitudViaje::create([
             'IdViaje' => $viaje->IdViaje,
             'IdUsuario' => $usuario->IdUsuario,
-            'AsientosSolicitados' => 1,
             'IdEstado' => 1, // Pendiente
+            'FechaSolicitud' => now(),
+            'AsientosSolicitados' => $request->AsientosSolicitados,
+            'Mensaje' => $mensajeStr,
         ]);
 
         return redirect()->route('search.index')->with('success', 'Solicitud enviada al conductor. Espera su respuesta.');
@@ -84,6 +137,19 @@ class SolicitudController extends Controller
                 'AsientosDisponibles' => $viaje->AsientosDisponibles - $solicitud->AsientosSolicitados,
             ]);
 
+            if (str_starts_with($solicitud->Mensaje, 'Invitados: ')) {
+                $correosStr = substr($solicitud->Mensaje, 11);
+                $correosArray = array_map('trim', explode(',', $correosStr));
+                foreach ($correosArray as $correo) {
+                    if (!empty($correo)) {
+                        \App\Models\InvitadoViaje::firstOrCreate([
+                            'IdViaje' => $viaje->IdViaje,
+                            'Correo' => $correo
+                        ]);
+                    }
+                }
+            }
+
             ParticipanteViaje::create([
                 'IdViaje' => $viaje->IdViaje,
                 'IdUsuario' => $solicitud->IdUsuario,
@@ -99,5 +165,34 @@ class SolicitudController extends Controller
 
             return back()->with('success', 'Solicitud rechazada.');
         }
+    }
+
+    public function cancelar(Request $request, SolicitudViaje $solicitud)
+    {
+        $usuario = Auth::user();
+        if ($solicitud->IdUsuario != $usuario->IdUsuario && $solicitud->viaje->IdConductor != $usuario->IdUsuario) {
+            abort(403, 'No tienes permiso para cancelar este pasaje.');
+        }
+
+        if ($solicitud->IdEstado == 4) {
+            return back()->withErrors(['Esta solicitud ya fue cancelada.']);
+        }
+
+        $viaje = $solicitud->viaje;
+
+        if ($solicitud->IdEstado == 2) { // Aceptada
+            $viaje->update([
+                'AsientosDisponibles' => $viaje->AsientosDisponibles + $solicitud->AsientosSolicitados,
+            ]);
+
+            \App\Models\ParticipanteViaje::where('IdSolicitud', $solicitud->IdSolicitud)
+                ->delete();
+        }
+
+        $solicitud->update([
+            'IdEstado' => 4, // Cancelada
+        ]);
+
+        return back()->with('success', 'Pasaje cancelado y lugar liberado correctamente.');
     }
 }

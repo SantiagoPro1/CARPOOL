@@ -65,4 +65,9 @@ class Viaje extends Model
         return $this->belongsToMany(Usuario::class, 'ParticipantesViaje', 'IdViaje', 'IdUsuario')
                     ->withPivot(['IdSolicitud', 'FechaSalida']);
     }
+
+    public function invitados()
+    {
+        return $this->hasMany(InvitadoViaje::class, 'IdViaje', 'IdViaje');
+    }
 }

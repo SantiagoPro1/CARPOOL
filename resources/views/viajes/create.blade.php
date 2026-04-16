@@ -60,7 +60,10 @@
         </div>
         
         <div class="form-group" style="margin-top: 16px;">
-            <label class="form-label">Vehículo Seleccionado</label>
+            <label class="form-label" style="display: flex; justify-content: space-between;">
+                <span>Vehículo Seleccionado</span>
+                <a href="{{ route('vehiculos.create') }}" style="font-size: 0.8rem; color: var(--blue-bright); text-decoration: none;">+ Registrar otro vehículo</a>
+            </label>
             <select name="IdVehiculo" class="form-control" required style="appearance: auto; background-color: var(--surface-color);">
                 @foreach($vehiculos as $veh)
                     <option value="{{ $veh->IdVehiculo }}">{{ $veh->Modelo }} ({{ $veh->Placas }})</option>

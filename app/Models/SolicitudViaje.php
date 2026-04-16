@@ -21,6 +21,7 @@ class SolicitudViaje extends Model
         'AsientosSolicitados',
         'IdEstado',
         'FechaRespuesta',
+        'Mensaje',
     ];
 
     // Relationships

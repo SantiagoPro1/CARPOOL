@@ -14,8 +14,14 @@ class ViajeController extends Controller
     public function index()
     {
         $usuario = Auth::user();
-        $viajes = Viaje::where('IdConductor', $usuario->IdUsuario)->orderBy('FechaSalida', 'asc')->get();
-        $viajesPasajero = $usuario->viajesComoPasajero()->orderBy('FechaSalida', 'asc')->get();
+        $viajes = Viaje::where('IdConductor', $usuario->IdUsuario)
+            ->orderBy('IdEstado', 'asc')
+            ->orderBy('FechaSalida', 'asc')
+            ->get();
+        $viajesPasajero = $usuario->viajesComoPasajero()
+            ->orderBy('Viajes.IdEstado', 'asc')
+            ->orderBy('Viajes.FechaSalida', 'asc')
+            ->get();
         
         return view('viajes.index', compact('viajes', 'viajesPasajero'));
     }
@@ -62,6 +68,24 @@ class ViajeController extends Controller
 
         $usuario = Auth::user();
 
+        $horaSalida = \Carbon\Carbon::parse($request->FechaSalida);
+        $horaInicio = (clone $horaSalida)->subHours(1);
+        $horaFin = (clone $horaSalida)->addHours(1);
+
+        $empalmeComoConductor = Viaje::where('IdConductor', $usuario->IdUsuario)
+            ->whereIn('IdEstado', [1, 2])
+            ->whereBetween('FechaSalida', [$horaInicio, $horaFin])
+            ->exists();
+            
+        $empalmeComoPasajero = $usuario->viajesComoPasajero()
+            ->whereIn('Viajes.IdEstado', [1, 2])
+            ->whereBetween('Viajes.FechaSalida', [$horaInicio, $horaFin])
+            ->exists();
+
+        if ($empalmeComoConductor || $empalmeComoPasajero) {
+            return back()->withErrors(['Por logística, no puedes tener viajes empalmados. Ya tienes un viaje programado en un margen de ±1 hora.'])->withInput();
+        }
+
         // Buscar si la ruta ya existe o crearla
         $ruta = Ruta::firstOrCreate([
             'IdOrigen' => $request->IdOrigen,
@@ -82,4 +106,5 @@ class ViajeController extends Controller
 
         return redirect()->route('dashboard')->with('success', '¡Viaje publicado exitosamente!');
     }
+
 }

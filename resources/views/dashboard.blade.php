@@ -39,6 +39,13 @@
                 <p>Como Pasajero</p>
             </div>
         </div>
+
+        <div class="card" style="margin-top: 16px; padding: 24px; border-left: 4px solid #10b981;">
+            <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Ganancias Estimadas por Viajes Finalizados</p>
+            <div style="font-size: 2rem; font-weight: 800; color: #10b981;">
+                ${{ number_format($gananciasTotales, 2) }}
+            </div>
+        </div>
     </div>
     
     <!-- Quick Actions -->

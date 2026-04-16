@@ -5,8 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
-    return redirect('/login');
-});
+    return view('welcome');
+})->name('welcome');
 
 
 
@@ -37,6 +37,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/viajes/{viaje}/chat', [ChatController::class, 'show'])->name('chat.show');
     Route::post('/viajes/{viaje}/chat', [ChatController::class, 'store'])->name('chat.store');
     
+    // Invitados
+    Route::post('/viajes/{viaje}/invitar', [ViajeController::class, 'invitar'])->name('viajes.invitar');
+    Route::delete('/solicitudes/{solicitud}/cancelar', [SolicitudController::class, 'cancelar'])->name('solicitudes.cancelar');
+
     Route::resource('viajes', ViajeController::class);
     Route::resource('vehiculos', VehiculoController::class);
     

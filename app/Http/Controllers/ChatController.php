@@ -13,9 +13,10 @@ class ChatController extends Controller
     {
         $usuario = Auth::user();
 
-        // Verificar si el usuario es el conductor o es un participante confirmado
+        // Verificar si el usuario es el conductor, pasajero confirmado o invitado
         $esParticipante = $viaje->IdConductor == $usuario->IdUsuario || 
-                          $viaje->pasajeros()->where('ParticipantesViaje.IdUsuario', $usuario->IdUsuario)->exists();
+                          $viaje->pasajeros()->where('Usuarios.IdUsuario', $usuario->IdUsuario)->exists() ||
+                          $viaje->invitados()->where('Correo', $usuario->Correo)->exists();
 
         if (!$esParticipante) {
             abort(403, 'No tienes acceso a este chat. Solo participantes confirmados.');
@@ -39,11 +40,18 @@ class ChatController extends Controller
         ]);
 
         $usuario = Auth::user();
+
+        // Verificar si el usuario es participante o invitado
         $esParticipante = $viaje->IdConductor == $usuario->IdUsuario || 
-                          $viaje->pasajeros()->where('ParticipantesViaje.IdUsuario', $usuario->IdUsuario)->exists();
+                          $viaje->pasajeros()->where('Usuarios.IdUsuario', $usuario->IdUsuario)->exists() ||
+                          $viaje->invitados()->where('Correo', $usuario->Correo)->exists();
 
         if (!$esParticipante) {
             abort(403);
+        }
+
+        if ($viaje->IdEstado >= 3) {
+            abort(403, 'El chat ha sido cerrado porque el viaje concluyó.');
         }
 
         Mensaje::create([
