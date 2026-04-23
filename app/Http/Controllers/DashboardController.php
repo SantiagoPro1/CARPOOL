@@ -12,7 +12,10 @@ class DashboardController extends Controller
     {
         $usuario = Auth::user();
         
-        // El dashboard muestra estadísticas iniciales para el usuario
+        $viajesEnCursoPasajero = $usuario->viajesComoPasajero()
+            ->where('Viajes.IdEstado', 2) // 2: En Curso
+            ->get();
+
         $viajesComoConductor = Viaje::where('IdConductor', $usuario->IdUsuario)
             ->whereIn('IdEstado', [1, 2]) // 1: Publicado, 2: En Curso
             ->count();
@@ -24,6 +27,13 @@ class DashboardController extends Controller
         $solicitudesPendientes = \App\Models\SolicitudViaje::whereHas('viaje', function($query) use ($usuario) {
             $query->where('IdConductor', $usuario->IdUsuario);
         })->where('IdEstado', 1)->count();
+
+        $solicitudesNotificaciones = \App\Models\SolicitudViaje::with('viaje.ruta.destino')
+            ->where('IdUsuario', $usuario->IdUsuario)
+            ->whereIn('IdEstado', [3, 5]) // 3: Rechazada, 5: Expulsado
+            ->get();
+
+
         $calificacion = number_format($usuario->calificacionesRecibidas()->avg('Estrellas') ?? 0, 1);
 
         $viajesTerminados = Viaje::where('IdConductor', $usuario->IdUsuario)
@@ -38,11 +48,15 @@ class DashboardController extends Controller
 
         return view('dashboard', compact(
             'usuario', 
+            'viajesEnCursoPasajero',
             'viajesComoConductor', 
             'viajesComoPasajero', 
             'solicitudesPendientes', 
+            'solicitudesNotificaciones',
             'calificacion',
             'gananciasTotales'
+
+
         ));
     }
 }

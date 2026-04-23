@@ -179,6 +179,7 @@ class SolicitudController extends Controller
         }
 
         $viaje = $solicitud->viaje;
+        $esConductor = ($viaje->IdConductor == $usuario->IdUsuario);
 
         if ($solicitud->IdEstado == 2) { // Aceptada
             $viaje->update([
@@ -190,9 +191,24 @@ class SolicitudController extends Controller
         }
 
         $solicitud->update([
-            'IdEstado' => 4, // Cancelada
+            'IdEstado' => $esConductor ? 5 : 4, // 5: Expulsado, 4: Cancelada
         ]);
 
-        return back()->with('success', 'Pasaje cancelado y lugar liberado correctamente.');
+        $mensaje = $esConductor ? 'Pasajero expulsado y lugar liberado.' : 'Pasaje cancelado y lugar liberado correctamente.';
+        return back()->with('success', $mensaje);
+
+    }
+
+    public function dismiss(SolicitudViaje $solicitud)
+    {
+        if ($solicitud->IdUsuario !== Auth::id()) {
+            abort(403);
+        }
+
+        // Simplemente marcamos como cancelada o la eliminamos para que no aparezca en notificaciones
+        $solicitud->update(['IdEstado' => 4]); // Cancelada/Leída
+
+        return back();
     }
 }
+

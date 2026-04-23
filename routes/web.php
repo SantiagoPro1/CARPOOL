@@ -33,13 +33,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/viajes/{viaje}/solicitar', [SolicitudController::class, 'store'])->name('solicitudes.store');
     Route::get('/solicitudes', [SolicitudController::class, 'index'])->name('solicitudes.index');
     Route::put('/solicitudes/{solicitud}', [SolicitudController::class, 'update'])->name('solicitudes.update');
+    Route::post('/solicitudes/{solicitud}/dismiss', [SolicitudController::class, 'dismiss'])->name('solicitudes.dismiss');
     
     Route::get('/viajes/{viaje}/chat', [ChatController::class, 'show'])->name('chat.show');
     Route::post('/viajes/{viaje}/chat', [ChatController::class, 'store'])->name('chat.store');
     
-    // Invitados
+    // Invitados y Gestión de Viaje
     Route::post('/viajes/{viaje}/invitar', [ViajeController::class, 'invitar'])->name('viajes.invitar');
     Route::delete('/solicitudes/{solicitud}/cancelar', [SolicitudController::class, 'cancelar'])->name('solicitudes.cancelar');
+    Route::post('/viajes/{viaje}/iniciar', [ViajeController::class, 'iniciar'])->name('viajes.iniciar');
+    Route::post('/viajes/{viaje}/finalizar', [ViajeController::class, 'finalizar'])->name('viajes.finalizar');
 
     Route::resource('viajes', ViajeController::class);
     Route::resource('vehiculos', VehiculoController::class);

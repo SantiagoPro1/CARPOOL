@@ -23,7 +23,13 @@ class ViajeController extends Controller
             ->orderBy('Viajes.FechaSalida', 'asc')
             ->get();
         
-        return view('viajes.index', compact('viajes', 'viajesPasajero'));
+        $solicitudesRechazadas = \App\Models\SolicitudViaje::with('viaje.ruta.destino')
+            ->where('IdUsuario', $usuario->IdUsuario)
+            ->whereIn('IdEstado', [3, 5]) // 3: Rechazada, 5: Expulsado
+            ->get();
+
+        
+        return view('viajes.index', compact('viajes', 'viajesPasajero', 'solicitudesRechazadas'));
     }
 
     public function update(Request $request, Viaje $viaje)
@@ -106,5 +112,36 @@ class ViajeController extends Controller
 
         return redirect()->route('dashboard')->with('success', '¡Viaje publicado exitosamente!');
     }
+
+    public function iniciar(Viaje $viaje)
+    {
+        if ($viaje->IdConductor != Auth::id()) {
+            abort(403);
+        }
+
+        // Validar que haya al menos un pasajero
+        if ($viaje->pasajeros()->count() < 1) {
+            return back()->withErrors(['No puedes iniciar un viaje sin pasajeros. ¡Espera a que alguien se una!']);
+        }
+
+        $viaje->update(['IdEstado' => 2]); // En Curso
+
+        return back()->with('success', '¡El viaje ha comenzado! Conduce con cuidado.');
+    }
+
+    public function finalizar(Request $request, Viaje $viaje)
+    {
+        if ($viaje->IdConductor != Auth::id()) {
+            abort(403);
+        }
+
+        $viaje->update([
+            'IdEstado' => 3, // Terminado
+            'ObservacionesFinales' => $request->ObservacionesFinales
+        ]);
+
+        return redirect()->route('viajes.index')->with('success', 'Viaje finalizado. ¡Gracias por compartir tu viaje!');
+    }
+
 
 }

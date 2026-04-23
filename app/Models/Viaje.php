@@ -25,8 +25,10 @@ class Viaje extends Model
         'AsientosDisponibles',
         'PrecioPorPasajero',
         'Notas',
+        'ObservacionesFinales',
         'IdEstado',
     ];
+
 
     // Relationships
 

@@ -18,8 +18,14 @@
         </div>
     </div>
 
-    @if($vehiculos->isNotEmpty())
-    <h3 style="font-size: 1.1rem; margin-top: 24px; margin-bottom: 12px;">Vehículos Registrados</h3>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; margin-bottom: 12px;">
+        <h3 style="font-size: 1.1rem; margin: 0;">Vehículos Registrados</h3>
+        @if($usuario->IdUsuario === Auth::id())
+            <a href="{{ route('vehiculos.create') }}" class="btn btn-outline" style="width: auto; padding: 6px 12px; font-size: 0.8rem; border-radius: 10px;">
+                + Agregar Vehículo
+            </a>
+        @endif
+    </div>
     @foreach($vehiculos as $veh)
         <div class="card" style="border-left: 4px solid var(--text-muted);">
             <div style="display: flex; justify-content: space-between;">
@@ -33,10 +39,10 @@
             </div>
         </div>
     @endforeach
-    @endif
 
     <h3 style="font-size: 1.1rem; margin-top: 24px; margin-bottom: 12px;">Reseñas Recibidas</h3>
     @if($resenas->isEmpty())
+
         <div class="card text-center">
             <p style="color: var(--text-muted); margin-bottom: 0;">Aún no tiene reseñas.</p>
         </div>

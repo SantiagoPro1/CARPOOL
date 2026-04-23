@@ -1,8 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<div style="margin-top: 10px;">
-    <h2 style="font-size: 1.5rem; margin-bottom: 24px;">Buscar Viaje</h2>
+<div class="animate-up">
+    <div style="margin-bottom: 32px;">
+        <h1 class="text-gradient" style="font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em;">Buscar Aventón</h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Encuentra compañeros para tu próximo viaje</p>
+    </div>
+
 
     <form method="GET" action="{{ route('search.index') }}" class="card">
         <div class="form-group">
@@ -54,45 +58,58 @@
         </div>
     @else
         @foreach($viajes as $viaje)
-            <div class="card" style="border-left: 4px solid var(--primary-color);">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+            <div class="card" style="border-left: 4px solid var(--blue-primary);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
                     <div>
-                        <h3 style="font-size: 1.1rem; margin-bottom: 2px;">
-                            {{ $viaje->ruta->origen->Nombre ?? 'Origen' }} &rarr; {{ $viaje->ruta->destino->Nombre ?? 'Destino' }}
+                        <h3 style="font-size: 1.15rem; margin-bottom: 4px; font-weight: 700;">
+                            {{ $viaje->ruta->origen->Nombre }} &rarr; {{ $viaje->ruta->destino->Nombre }}
                         </h3>
-                        <p style="color: var(--text-muted); font-size: 0.875rem;">
-                            Conductor: {{ $viaje->conductor->NombreCompleto ?? 'Usuario' }}
+                        <p style="color: var(--text-muted); font-size: 0.85rem; display: flex; align-items: center; gap: 6px;">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                            {{ $viaje->conductor->NombreCompleto }}
                         </p>
                     </div>
                     <div style="text-align: right;">
-                        <span style="font-size: 1.1rem; font-weight: bold; color: var(--primary-color);">${{ number_format($viaje->PrecioPorPasajero, 2) }}</span>
+                        <p style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 2px;">Costo</p>
+                        <span style="font-size: 1.25rem; font-weight: 800; color: #10b981;">${{ number_format($viaje->PrecioPorPasajero, 0) }}</span>
                     </div>
                 </div>
                 
-                <div style="display: flex; gap: 16px; margin-bottom: 16px;">
-                    <div style="font-size: 0.875rem;">
-                        <span style="color: var(--text-muted);">Fecha:</span> <strong>{{ \Carbon\Carbon::parse($viaje->FechaSalida)->format('d/m/Y h:i A') }}</strong>
+                <div style="background: rgba(0,0,0,0.2); border-radius: 12px; padding: 12px; display: flex; justify-content: space-around; margin-bottom: 20px;">
+                    <div style="text-align: center;">
+                        <p style="font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin-bottom: 2px;">Salida</p>
+                        <p style="font-size: 0.85rem; font-weight: 700;">{{ \Carbon\Carbon::parse($viaje->FechaSalida)->format('h:i A') }}</p>
                     </div>
-                    <div style="font-size: 0.875rem;">
-                        <span style="color: var(--text-muted);">Lugares:</span> <strong>{{ $viaje->AsientosDisponibles }}</strong>
+                    <div style="width: 1px; background: var(--border);"></div>
+                    <div style="text-align: center;">
+                        <p style="font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin-bottom: 2px;">Lugares</p>
+                        <p style="font-size: 0.85rem; font-weight: 700;">{{ $viaje->AsientosDisponibles }} disp.</p>
                     </div>
                 </div>
+
                 @if($viaje->AsientosDisponibles > 0)
-                <form method="POST" action="{{ route('solicitudes.store', $viaje) }}" style="width: 100%; border-top: 1px solid var(--border); padding-top: 12px;">
+                <form method="POST" action="{{ route('solicitudes.store', $viaje) }}" style="width: 100%; border-top: 1px solid var(--border); padding-top: 16px;">
                     @csrf
-                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                        <input type="number" name="AsientosSolicitados" value="1" min="1" max="{{ $viaje->AsientosDisponibles }}" class="form-control" style="width: 80px;" required title="Asientos a reservar">
-                        <input type="text" name="CorreosInvitados" placeholder="Correos amigos (opcional, comas)" class="form-control" style="flex: 1; font-size: 0.8rem;">
+                    <div style="display: grid; grid-template-columns: 80px 1fr; gap: 10px; margin-bottom: 12px;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" style="font-size: 0.6rem;">LUGARES</label>
+                            <input type="number" name="AsientosSolicitados" value="1" min="1" max="{{ $viaje->AsientosDisponibles }}" class="form-control" style="padding: 10px; text-align: center;" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" style="font-size: 0.6rem;">INVITADOS (OPCIONAL)</label>
+                            <input type="text" name="CorreosInvitados" placeholder="ejemplo@tecnm.mx" class="form-control" style="padding: 10px; font-size: 0.85rem;">
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-outline" style="padding: 8px 12px; font-size: 0.875rem; width: 100%;">Reservar</button>
+                    <button type="submit" class="btn" style="padding: 12px; font-size: 0.9rem;">Solicitar Viaje</button>
                 </form>
                 @else
-                <div style="text-align: center; color: var(--danger-text); padding: 8px; font-weight: bold;">
-                    Lleno o Cancelado
+                <div style="background: var(--danger-soft); color: var(--danger-text); padding: 12px; border-radius: 12px; text-align: center; font-size: 0.85rem; font-weight: 700;">
+                    Viaje Completo
                 </div>
                 @endif
             </div>
         @endforeach
+
     @endif
 </div>
 @endsection

@@ -15,7 +15,7 @@ class EstadoViaje extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'ClaveEstado',
+        'NombreEstado',
     ];
 
     // Relationships

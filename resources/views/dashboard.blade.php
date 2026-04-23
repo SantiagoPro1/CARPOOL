@@ -5,85 +5,221 @@
 
     @if(session('success'))
         <div class="alert alert-success">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 8px;"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
             {{ session('success') }}
         </div>
     @endif
 
     <!-- Header Section -->
-    <header style="margin-bottom: 32px;">
-        <p style="color: var(--text-muted); font-size: 0.9rem; font-weight: 500; margin-bottom: 4px;">Panel de Control</p>
-        <h1 class="text-gradient" style="font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em;">Hola, {!! explode(' ', $usuario->NombreCompleto)[0] !!}</h1>
+    <header style="margin-bottom: 32px; display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <p style="color: var(--text-muted); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px;">Panel Principal</p>
+            <h1 class="text-gradient" style="font-size: 2.4rem; font-weight: 800; letter-spacing: -0.03em;">Hola, {!! explode(' ', $usuario->NombreCompleto)[0] !!}</h1>
+        </div>
+        <div style="width: 50px; height: 50px; background: var(--blue-deep); border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
+            <span style="font-weight: 800; color: white; font-size: 1.2rem;">{{ substr($usuario->NombreCompleto, 0, 1) }}</span>
+        </div>
     </header>
 
-    <!-- Stats Section -->
-    <div style="display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 32px;">
-        <div class="card" style="display: flex; align-items: center; justify-content: space-between; padding: 24px;">
-            <div>
-                <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px;">Tu Calificación</p>
-                <div style="font-size: 1.8rem; font-weight: 800; color: #fbbf24; display: flex; align-items: center; gap: 8px;">
-                    ⭐ {{ $calificacion }}
-                </div>
-            </div>
-            <div style="height: 50px; width: 50px; border-radius: 14px; background: rgba(251, 191, 36, 0.1); display: flex; align-items: center; justify-content: center;">
-                <svg width="24" height="24" fill="#fbbf24" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    <!-- Reputation & Earnings Row -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+        <div class="card" style="padding: 20px; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); border: none;">
+            <p style="color: rgba(255,255,255,0.6); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px;">Reputación</p>
+            <div style="font-size: 1.8rem; font-weight: 800; color: #fbbf24; display: flex; align-items: center; gap: 8px;">
+                {{ $calificacion }} <span style="font-size: 1.2rem;">⭐</span>
             </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-            <div class="stat-box">
-                <h3>{{ $viajesComoConductor }}</h3>
-                <p>Como Conductor</p>
-            </div>
-            <div class="stat-box" style="background: rgba(14, 165, 233, 0.05); border-color: rgba(14, 165, 233, 0.1);">
-                <h3 style="color: var(--blue-bright);">{{ $viajesComoPasajero }}</h3>
-                <p>Como Pasajero</p>
-            </div>
-        </div>
-
-        <div class="card" style="margin-top: 16px; padding: 24px; border-left: 4px solid #10b981;">
-            <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Ganancias Estimadas por Viajes Finalizados</p>
-            <div style="font-size: 2rem; font-weight: 800; color: #10b981;">
-                ${{ number_format($gananciasTotales, 2) }}
+        <div class="card" style="padding: 20px; display: flex; flex-direction: column; justify-content: center; border-left: 4px solid #10b981;">
+            <p style="color: var(--text-muted); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px;">Ganancias</p>
+            <div style="font-size: 1.8rem; font-weight: 800; color: #10b981;">
+                ${{ number_format($gananciasTotales, 0) }}
             </div>
         </div>
     </div>
+
+    <!-- Stats Grid -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px;">
+        <div class="stat-card">
+            <div class="icon-bg" style="background: rgba(37, 99, 235, 0.1); color: var(--blue-bright);">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+            </div>
+            <h3>{{ $viajesComoConductor }}</h3>
+            <p>Como Conductor</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="icon-bg" style="background: rgba(14, 165, 233, 0.1); color: var(--accent-vivid);">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            </div>
+            <h3>{{ $viajesComoPasajero }}</h3>
+            <p>Como Pasajero</p>
+        </div>
+    </div>
+
     
-    <!-- Quick Actions -->
-    <div style="display: grid; gap: 12px; margin-bottom: 32px;">
-        <a href="{{ route('viajes.create') }}" class="btn">
-            <svg style="margin-right: 8px;" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            Publicar un Viaje
-        </a>
-        <a href="{{ route('search.index') }}" class="btn btn-outline" style="border-width: 1.5px;">
-            <svg style="margin-right: 8px;" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            Buscar Aventón
-        </a>
-    </div>
-
-    @if($solicitudesPendientes > 0)
-    <!-- Notifications -->
-    <div class="card" style="border: 1px solid var(--blue-primary); background: rgba(37, 99, 235, 0.05);">
-        <div style="display: flex; align-items: center; gap: 16px;">
-            <div style="height: 44px; width: 44px; border-radius: 12px; background: var(--blue-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M12 22a2 2 0 002-2h-4a2 2 0 002 2zm10-6v-5a8 8 0 00-5-7.3V3a3 3 0 00-6 0v.7A8 8 0 002 11v5l-2 2v1h24v-1l-2-2z"/></svg>
+    <!-- Active Notifications / Pending Actions -->
+    @if($viajesEnCursoPasajero->isNotEmpty())
+        @foreach($viajesEnCursoPasajero as $vEnCurso)
+        <a href="{{ route('viajes.index') }}" class="notification-banner" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); margin-bottom: 12px; animation: pulse 2s infinite;">
+            <div class="banner-icon" style="background: rgba(255,255,255,0.2);">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.97 4.43c-.16.09-.33.14-.5.14s-.34-.05-.5-.14l-7.97-4.43c-.32-.17-.53-.5-.53-.88V7.5c0-.38.21-.71.53-.88l7.97-4.43c.16-.09.33-.14.5-.14s.34.05.5.14l7.97 4.43c.32.17.53.5.53.88v9z"/></svg>
             </div>
             <div style="flex: 1;">
-                <h4 style="font-size: 1rem; margin-bottom: 2px;">{{ $solicitudesPendientes }} Solicitudes</h4>
-                <p style="color: var(--text-muted); font-size: 0.8rem;">Tienes pasajeros esperando respuesta</p>
+                <p style="font-weight: 700; font-size: 0.95rem; color: white;">¡Tu viaje ha comenzado!</p>
+                <p style="font-size: 0.8rem; color: rgba(255,255,255,0.8);">Vas camino a <strong>{{ $vEnCurso->ruta->destino->Nombre }}</strong> con {{ explode(' ', $vEnCurso->conductor->NombreCompleto)[0] }}.</p>
             </div>
-            <a href="{{ route('solicitudes.index') }}" class="btn" style="width: auto; padding: 10px 16px; font-size: 0.8rem; background: var(--blue-primary);">Ver</a>
-        </div>
-    </div>
+            <div style="color: white; opacity: 0.8;">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </div>
+        </a>
+        @endforeach
     @endif
 
-    <footer style="margin-top: 48px; border-top: 1px solid var(--border); padding-top: 24px;">
+    @if($solicitudesNotificaciones->isNotEmpty())
+
+        @foreach($solicitudesNotificaciones as $notif)
+        <div class="notification-banner" style="background: linear-gradient(135deg, {{ $notif->IdEstado == 5 ? 'var(--danger-red)' : '#f59e0b' }} 0%, {{ $notif->IdEstado == 5 ? 'var(--danger-dark)' : '#d97706' }} 100%); margin-bottom: 12px; position: relative;">
+            <div class="banner-icon" style="background: rgba(255,255,255,0.2);">
+                @if($notif->IdEstado == 5)
+                    <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                @else
+                    <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+                @endif
+            </div>
+            <div style="flex: 1;">
+                <p style="font-weight: 700; font-size: 0.95rem; color: white;">{{ $notif->IdEstado == 5 ? '¡Atención!' : 'Solicitud Rechazada' }}</p>
+                <p style="font-size: 0.8rem; color: rgba(255,255,255,0.8);">
+                    {{ $notif->IdEstado == 5 
+                        ? "Has sido removido del viaje a " . $notif->viaje->ruta->destino->Nombre
+                        : "Tu solicitud para el viaje a " . $notif->viaje->ruta->destino->Nombre . " ha sido rechazada." }}
+                </p>
+            </div>
+            <form action="{{ route('solicitudes.dismiss', $notif) }}" method="POST">
+                @csrf
+                <button type="submit" style="background: transparent; border: none; color: white; cursor: pointer; padding: 5px;">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </form>
+        </div>
+        @endforeach
+    @endif
+
+
+    @if($solicitudesPendientes > 0)
+    <a href="{{ route('solicitudes.index') }}" class="notification-banner">
+        <div class="banner-icon">
+            <span class="pulse"></span>
+            <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M12 22a2 2 0 002-2h-4a2 2 0 002 2zm10-6v-5a8 8 0 00-5-7.3V3a3 3 0 00-6 0v.7A8 8 0 002 11v5l-2 2v1h24v-1l-2-2z"/></svg>
+        </div>
+        <div style="flex: 1;">
+            <p style="font-weight: 700; font-size: 0.95rem; color: white;">{{ $solicitudesPendientes }} Solicitudes pendientes</p>
+            <p style="font-size: 0.8rem; color: rgba(255,255,255,0.7);">Hay personas esperando respuesta para viajar contigo</p>
+        </div>
+        <svg width="20" height="20" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+    </a>
+    @endif
+
+    <!-- Main Actions -->
+    <div style="margin-bottom: 40px;">
+        <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px;">¿Qué quieres hacer hoy?</p>
+        <div style="display: grid; gap: 12px;">
+            <a href="{{ route('viajes.create') }}" class="btn action-btn">
+                <div class="btn-icon" style="background: rgba(255,255,255,0.2);">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                </div>
+                <span>Publicar un Viaje</span>
+            </a>
+            <a href="{{ route('search.index') }}" class="btn btn-outline action-btn" style="border-width: 1.5px; background: rgba(255,255,255,0.03);">
+                <div class="btn-icon" style="background: rgba(37, 99, 235, 0.1); color: var(--blue-primary);">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+                <span>Buscar Aventón</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Quick Footer Links -->
+    <footer style="margin-top: 48px; border-top: 1px solid var(--border); padding-top: 24px; text-align: center;">
         <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit" style="background: transparent; border: 1px solid rgba(239, 68, 68, 0.2); color: var(--danger-text); cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; font-family: inherit; margin: 0 auto; padding: 10px 20px; border-radius: 12px; transition: var(--transition);" onmouseover="this.style.background='var(--danger-soft)'; this.style.borderColor='var(--danger-red)'" onmouseout="this.style.background='transparent'; this.style.borderColor='rgba(239, 68, 68, 0.2)'">
+            <button type="submit" class="logout-btn">
                 <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                Cerrar Sesión Activa
+                Cerrar Sesión
             </button>
         </form>
     </footer>
 </div>
+
+<style>
+    .stat-card {
+        background: var(--surface-elevated);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        text-align: left;
+        transition: var(--transition);
+    }
+    .stat-card:hover { transform: translateY(-4px); border-color: var(--blue-primary); }
+    .stat-card h3 { font-size: 1.8rem; font-weight: 800; margin: 10px 0 2px; }
+    .stat-card p { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+    .icon-bg { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    
+    .notification-banner {
+        background: linear-gradient(135deg, var(--blue-primary) 0%, #1d4ed8 100%);
+        padding: 16px 20px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        text-decoration: none;
+        margin-bottom: 32px;
+        box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+        transition: var(--transition);
+    }
+    .notification-banner:hover { transform: scale(1.02); filter: brightness(1.1); }
+    .banner-icon { position: relative; width: 44px; height: 44px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    
+    .pulse {
+        position: absolute;
+        top: -2px; right: -2px;
+        width: 10px; height: 10px;
+        background: #ef4444;
+        border-radius: 50%;
+        border: 2px solid #2563eb;
+        animation: pulse-animation 2s infinite;
+    }
+    
+    @keyframes pulse-animation {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+        70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+
+    .action-btn {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 16px;
+        padding: 18px 24px;
+        height: auto;
+    }
+    .btn-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+    .logout-btn {
+        background: transparent;
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        color: var(--danger-text);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        padding: 12px 24px;
+        border-radius: 14px;
+        transition: var(--transition);
+    }
+    .logout-btn:hover { background: var(--danger-soft); border-color: var(--danger-red); transform: translateY(-2px); }
+</style>
 @endsection

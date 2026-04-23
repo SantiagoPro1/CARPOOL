@@ -30,6 +30,7 @@ class StatusSeeder extends Seeder
             ['IdEstado' => 2, 'NombreEstado' => 'Aceptada'],
             ['IdEstado' => 3, 'NombreEstado' => 'Rechazada'],
             ['IdEstado' => 4, 'NombreEstado' => 'Cancelada'],
+            ['IdEstado' => 5, 'NombreEstado' => 'Expulsado'],
         ];
 
         foreach ($estadosSolicitud as $estado) {
