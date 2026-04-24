@@ -21,15 +21,43 @@
     @endif
 
 
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
-        <div>
-            <h1 class="text-gradient" style="font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em;">Mis Viajes</h1>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Gestiona tus trayectos activos y pasados</p>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="background: linear-gradient(135deg, #2563eb, #1d4ed8); width: 50px; height: 50px; border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); flex-shrink: 0;">
+                <svg width="26" height="26" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+            </div>
+            <div>
+                <h1 class="text-gradient" style="font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em;">Mis Viajes</h1>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Gestiona tus trayectos activos y pasados</p>
+            </div>
         </div>
         <a href="{{ route('viajes.create') }}" class="btn" style="width: auto; padding: 12px 20px; font-size: 0.9rem; border-radius: 14px;">
             <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right: 6px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
             Publicar
         </a>
+    </div>
+
+    <!-- FILTROS Y GANANCIAS -->
+    <div class="card" style="margin-bottom: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border);">
+        <form method="GET" action="{{ route('viajes.index') }}" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
+            <div>
+                <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-bottom: 4px; display: block;">Estado</label>
+                <select name="estado" class="form-control" style="padding: 8px 12px; font-size: 0.85rem; border-radius: 8px; width: 140px;">
+                    <option value="todos" {{ $filtroEstado == 'todos' ? 'selected' : '' }}>Todos</option>
+                    <option value="activos" {{ $filtroEstado == 'activos' ? 'selected' : '' }}>Activos</option>
+                    <option value="historial" {{ $filtroEstado == 'historial' ? 'selected' : '' }}>Historial</option>
+                </select>
+            </div>
+            <div>
+                <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-bottom: 4px; display: block;">Período</label>
+                <select name="fecha" class="form-control" style="padding: 8px 12px; font-size: 0.85rem; border-radius: 8px; width: 140px;">
+                    <option value="todos" {{ $filtroFecha == 'todos' ? 'selected' : '' }}>Desde siempre</option>
+                    <option value="mes" {{ $filtroFecha == 'mes' ? 'selected' : '' }}>Este Mes</option>
+                    <option value="anio" {{ $filtroFecha == 'anio' ? 'selected' : '' }}>Este Año</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-outline" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; height: 38px;">Filtrar</button>
+        </form>
     </div>
 
     <!-- TABS DE NAVEGACIÓN -->
@@ -41,11 +69,8 @@
     <!-- SECCIÓN CONDUCTOR -->
     <div id="section-conductor" class="ride-section active">
         @if($viajes->isEmpty())
-            <div class="card text-center" style="padding: 60px 20px; border-style: dashed; border-color: rgba(37, 99, 235, 0.2); background: transparent;">
-
-                <div style="background: var(--blue-deep); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-                    <svg width="30" height="30" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
-                </div>
+            <div class="card text-center" style="padding: 40px 20px; border-style: dashed; border-color: rgba(37, 99, 235, 0.2); background: transparent;">
+                <img src="{{ asset('img/trips_empty.png') }}" alt="Sin viajes" style="width: 180px; height: 180px; object-fit: cover; border-radius: 20px; margin: 0 auto 20px; display: block; opacity: 0.85;">
                 <h3 style="margin-bottom: 8px;">Aún no tienes viajes</h3>
                 <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">Publica tu primer viaje y ayuda a la comunidad del Tec a moverse mejor.</p>
                 <a href="{{ route('viajes.create') }}" class="btn" style="width: auto; padding: 12px 30px;">Comenzar ahora</a>
@@ -159,6 +184,11 @@
                     </div>
                 @endforeach
             </div>
+            
+            <!-- Paginación personalizada para Conductor -->
+            <div style="margin-top: 24px; display: flex; justify-content: center; width: 100%;">
+                {{ $viajes->links('pagination::bootstrap-4') }}
+            </div>
         @endif
     </div>
 
@@ -166,8 +196,10 @@
     <div id="section-pasajero" class="ride-section" style="display: none;">
         @if($viajesPasajero->isEmpty())
             <div class="card text-center" style="padding: 40px 20px;">
-                <p style="color: var(--text-muted);">No te has unido a ningún viaje aún.</p>
-                <a href="{{ route('search.index') }}" class="btn btn-outline" style="margin-top: 16px;">Buscar un aventón</a>
+                <img src="{{ asset('img/search_empty.png') }}" alt="Sin viajes" style="width: 140px; height: 140px; object-fit: cover; border-radius: 20px; margin: 0 auto 16px; display: block; opacity: 0.8;">
+                <h4 style="margin-bottom: 8px; font-weight: 700;">No te has unido a ningún viaje aún</h4>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">Busca un aventón y únete a un viaje con compañeros del campus.</p>
+                <a href="{{ route('search.index') }}" class="btn btn-outline" style="width: auto; padding: 12px 24px;">Buscar un aventón</a>
             </div>
         @else
             <div style="display: grid; gap: 20px;">
@@ -219,6 +251,11 @@
                         </div>
                     </div>
                 @endforeach
+            </div>
+
+            <!-- Paginación personalizada para Pasajero -->
+            <div style="margin-top: 24px; display: flex; justify-content: center; width: 100%;">
+                {{ $viajesPasajero->links('pagination::bootstrap-4') }}
             </div>
         @endif
 

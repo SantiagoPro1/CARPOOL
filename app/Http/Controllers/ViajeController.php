@@ -11,25 +11,62 @@ use Illuminate\Support\Facades\Auth;
 
 class ViajeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $usuario = Auth::user();
-        $viajes = Viaje::where('IdConductor', $usuario->IdUsuario)
-            ->orderBy('IdEstado', 'asc')
-            ->orderBy('FechaSalida', 'asc')
-            ->get();
-        $viajesPasajero = $usuario->viajesComoPasajero()
-            ->orderBy('Viajes.IdEstado', 'asc')
-            ->orderBy('Viajes.FechaSalida', 'asc')
-            ->get();
+
+        $filtroEstado = $request->query('estado', 'activos'); // activos, historial, todos
+        $filtroFecha = $request->query('fecha', 'todos'); // mes, anio, todos
+
+        $queryConductor = Viaje::where('IdConductor', $usuario->IdUsuario);
+        $queryPasajero = $usuario->viajesComoPasajero();
+
+        if ($filtroEstado === 'activos') {
+            $queryConductor->whereIn('IdEstado', [1, 2]);
+            $queryPasajero->whereIn('Viajes.IdEstado', [1, 2]);
+        } elseif ($filtroEstado === 'historial') {
+            $queryConductor->whereIn('IdEstado', [3, 4]);
+            $queryPasajero->whereIn('Viajes.IdEstado', [3, 4]);
+        }
+
+        if ($filtroFecha === 'mes') {
+            $queryConductor->whereMonth('FechaSalida', date('m'))->whereYear('FechaSalida', date('Y'));
+            $queryPasajero->whereMonth('Viajes.FechaSalida', date('m'))->whereYear('Viajes.FechaSalida', date('Y'));
+        } elseif ($filtroFecha === 'anio') {
+            $queryConductor->whereYear('FechaSalida', date('Y'));
+            $queryPasajero->whereYear('Viajes.FechaSalida', date('Y'));
+        }
+
+        $viajes = $queryConductor->orderBy('IdEstado', 'asc')
+            ->orderBy('FechaSalida', 'desc')
+            ->paginate(5, ['*'], 'page_conductor')->withQueryString();
+
+        $viajesPasajero = $queryPasajero->orderBy('Viajes.IdEstado', 'asc')
+            ->orderBy('Viajes.FechaSalida', 'desc')
+            ->paginate(5, ['*'], 'page_pasajero')->withQueryString();
+
+        // Calcular ganancias
+        $queryGanancias = Viaje::where('IdConductor', $usuario->IdUsuario)->where('IdEstado', 3);
+        if ($filtroFecha === 'mes') {
+            $queryGanancias->whereMonth('FechaSalida', date('m'))->whereYear('FechaSalida', date('Y'));
+        } elseif ($filtroFecha === 'anio') {
+            $queryGanancias->whereYear('FechaSalida', date('Y'));
+        }
+        $viajesTerminados = $queryGanancias->get();
         
+        $gananciasTotales = 0;
+        foreach($viajesTerminados as $vt) {
+            $pasajerosCount = $vt->AsientosTotales - $vt->AsientosDisponibles;
+            $gananciasTotales += ($pasajerosCount * $vt->PrecioPorPasajero);
+        }
+
         $solicitudesRechazadas = \App\Models\SolicitudViaje::with('viaje.ruta.destino')
             ->where('IdUsuario', $usuario->IdUsuario)
             ->whereIn('IdEstado', [3, 5]) // 3: Rechazada, 5: Expulsado
             ->get();
 
         
-        return view('viajes.index', compact('viajes', 'viajesPasajero', 'solicitudesRechazadas'));
+        return view('viajes.index', compact('viajes', 'viajesPasajero', 'solicitudesRechazadas', 'filtroEstado', 'filtroFecha', 'gananciasTotales'));
     }
 
     public function update(Request $request, Viaje $viaje)
@@ -143,5 +180,30 @@ class ViajeController extends Controller
         return redirect()->route('viajes.index')->with('success', 'Viaje finalizado. ¡Gracias por compartir tu viaje!');
     }
 
+    public function ganancias(Request $request)
+    {
+        $usuario = Auth::user();
+        $filtroFecha = $request->query('fecha', 'todos'); // mes, anio, todos
 
+        $queryGanancias = Viaje::with(['ruta.origen', 'ruta.destino'])->where('IdConductor', $usuario->IdUsuario)->where('IdEstado', 3);
+        
+        if ($filtroFecha === 'mes') {
+            $queryGanancias->whereMonth('FechaSalida', date('m'))->whereYear('FechaSalida', date('Y'));
+        } elseif ($filtroFecha === 'anio') {
+            $queryGanancias->whereYear('FechaSalida', date('Y'));
+        }
+        
+        $viajesTerminados = $queryGanancias->orderBy('FechaSalida', 'desc')->get();
+        
+        $gananciasTotales = 0;
+        foreach($viajesTerminados as $vt) {
+            $pasajerosCount = $vt->AsientosTotales - $vt->AsientosDisponibles;
+            $gananciaViaje = $pasajerosCount * $vt->PrecioPorPasajero;
+            $vt->gananciaTotal = $gananciaViaje;
+            $vt->pasajerosCount = $pasajerosCount;
+            $gananciasTotales += $gananciaViaje;
+        }
+
+        return view('viajes.ganancias', compact('viajesTerminados', 'gananciasTotales', 'filtroFecha'));
+    }
 }

@@ -17,6 +17,14 @@
         </div>
     @endif
 
+    <div style="background: rgba(37, 99, 235, 0.1); border-radius: 16px; padding: 24px; text-align: center; margin-bottom: 24px; border: 1px dashed rgba(37, 99, 235, 0.3);">
+        <svg width="80" height="80" fill="none" stroke="var(--blue-bright)" viewBox="0 0 24 24" style="margin-bottom: 12px; filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.5));">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 13h18M5 13l1.5-6h11L19 13M5 13v4a2 2 0 002 2h10a2 2 0 002-2v-4M8 17v2M16 17v2"></path>
+        </svg>
+        <p style="color: var(--text-main); font-weight: 700; font-size: 1.1rem; margin-bottom: 4px;">Detalles de tu Automóvil</p>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">Registra tu auto para empezar a compartir viajes y ganar dinero con tus compañeros.</p>
+    </div>
+
     <form method="POST" action="{{ route('vehiculos.store') }}" class="card">
         @csrf
         <div class="form-group">

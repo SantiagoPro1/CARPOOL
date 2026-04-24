@@ -33,7 +33,7 @@
                 <span>Buscar</span>
             </a>
             <a href="{{ route('viajes.index') }}" class="nav-item {{ request()->routeIs('viajes.*') ? 'active' : '' }}">
-                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
                 <span>Viajes</span>
             </a>
             <a href="{{ route('perfil.show') }}" class="nav-item {{ request()->routeIs('perfil.*') ? 'active' : '' }}">

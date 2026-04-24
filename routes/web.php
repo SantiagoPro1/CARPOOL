@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/solicitudes/{solicitud}/cancelar', [SolicitudController::class, 'cancelar'])->name('solicitudes.cancelar');
     Route::post('/viajes/{viaje}/iniciar', [ViajeController::class, 'iniciar'])->name('viajes.iniciar');
     Route::post('/viajes/{viaje}/finalizar', [ViajeController::class, 'finalizar'])->name('viajes.finalizar');
+    
+    Route::get('/reporte-ganancias', [ViajeController::class, 'ganancias'])->name('ganancias.index');
 
     Route::resource('viajes', ViajeController::class);
     Route::resource('vehiculos', VehiculoController::class);

@@ -11,15 +11,28 @@
     @endif
 
     <!-- Header Section -->
-    <header style="margin-bottom: 32px; display: flex; justify-content: space-between; align-items: flex-start;">
+    <header style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-start;">
         <div>
             <p style="color: var(--text-muted); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px;">Panel Principal</p>
             <h1 class="text-gradient" style="font-size: 2.4rem; font-weight: 800; letter-spacing: -0.03em;">Hola, {!! explode(' ', $usuario->NombreCompleto)[0] !!}</h1>
         </div>
-        <div style="width: 50px; height: 50px; background: var(--blue-deep); border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
-            <span style="font-weight: 800; color: white; font-size: 1.2rem;">{{ substr($usuario->NombreCompleto, 0, 1) }}</span>
-        </div>
+        <a href="{{ route('perfil.show') }}" style="text-decoration: none;">
+            <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #2563eb, #38bdf8); border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);">
+                <span style="font-weight: 800; color: white; font-size: 1.2rem;">{{ substr($usuario->NombreCompleto, 0, 1) }}</span>
+            </div>
+        </a>
     </header>
+
+    <!-- Hero Banner -->
+    <div style="border-radius: 20px; overflow: hidden; margin-bottom: 24px; position: relative; height: 140px; border: 1px solid rgba(56, 189, 248, 0.1);">
+        <img src="{{ asset('img/hero_carpool.png') }}" alt="Carpool" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+        <div style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.3)); display: flex; align-items: center; padding: 24px;">
+            <div>
+                <p style="font-size: 1.1rem; font-weight: 800; color: white; margin-bottom: 4px;">Comparte tu camino 🚗</p>
+                <p style="font-size: 0.8rem; color: rgba(255,255,255,0.7);">Publica un viaje o encuentra aventón con compañeros del Tec.</p>
+            </div>
+        </div>
+    </div>
 
     <!-- Reputation & Earnings Row -->
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
@@ -30,30 +43,41 @@
             </div>
         </div>
 
-        <div class="card" style="padding: 20px; display: flex; flex-direction: column; justify-content: center; border-left: 4px solid #10b981;">
-            <p style="color: var(--text-muted); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px;">Ganancias</p>
+        <a href="{{ route('ganancias.index') }}" class="card" style="padding: 20px; display: flex; flex-direction: column; justify-content: center; border-left: 4px solid #10b981; text-decoration: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <p style="color: var(--text-muted); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px;">Ganancias</p>
+                <svg width="14" height="14" fill="none" stroke="var(--text-muted)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </div>
             <div style="font-size: 1.8rem; font-weight: 800; color: #10b981;">
                 ${{ number_format($gananciasTotales, 0) }}
             </div>
-        </div>
+        </a>
     </div>
 
     <!-- Stats Grid -->
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px;">
         <div class="stat-card">
-            <div class="icon-bg" style="background: rgba(37, 99, 235, 0.1); color: var(--blue-bright);">
-                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div class="icon-bg" style="background: rgba(37, 99, 235, 0.1); color: var(--blue-bright);">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                </div>
+                <span style="font-size: 0.65rem; font-weight: 800; color: var(--blue-bright); background: rgba(37, 99, 235, 0.1); padding: 2px 8px; border-radius: 10px; text-transform: uppercase;">Activos</span>
             </div>
-            <h3>{{ $viajesComoConductor }}</h3>
-            <p>Como Conductor</p>
+            <h3 style="margin-top: 15px;">{{ $viajesComoConductor }}</h3>
+            <p style="font-size: 0.9rem; color: var(--text-main); font-weight: 700;">Viajes que Ofrezco</p>
+            <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 2px;">Viajes donde tú vas manejando</span>
         </div>
 
         <div class="stat-card">
-            <div class="icon-bg" style="background: rgba(14, 165, 233, 0.1); color: var(--accent-vivid);">
-                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div class="icon-bg" style="background: rgba(14, 165, 233, 0.1); color: var(--accent-vivid);">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                </div>
+                <span style="font-size: 0.65rem; font-weight: 800; color: var(--accent-vivid); background: rgba(14, 165, 233, 0.1); padding: 2px 8px; border-radius: 10px; text-transform: uppercase;">En Curso</span>
             </div>
-            <h3>{{ $viajesComoPasajero }}</h3>
-            <p>Como Pasajero</p>
+            <h3 style="margin-top: 15px;">{{ $viajesComoPasajero }}</h3>
+            <p style="font-size: 0.9rem; color: var(--text-main); font-weight: 700;">Mis Reservas</p>
+            <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 2px;">Viajes donde apartaste asiento</span>
         </div>
     </div>
 
@@ -126,15 +150,21 @@
         <div style="display: grid; gap: 12px;">
             <a href="{{ route('viajes.create') }}" class="btn action-btn">
                 <div class="btn-icon" style="background: rgba(255,255,255,0.2);">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 13h18M5 13l1.5-6h11L19 13M5 13v4a2 2 0 002 2h10a2 2 0 002-2v-4M8 17v2M16 17v2"></path></svg>
                 </div>
                 <span>Publicar un Viaje</span>
             </a>
             <a href="{{ route('search.index') }}" class="btn btn-outline action-btn" style="border-width: 1.5px; background: rgba(255,255,255,0.03);">
                 <div class="btn-icon" style="background: rgba(37, 99, 235, 0.1); color: var(--blue-primary);">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12a4 4 0 100-8 4 4 0 000 8z"></path></svg>
                 </div>
                 <span>Buscar Aventón</span>
+            </a>
+            <a href="{{ route('ganancias.index') }}" class="btn btn-outline action-btn" style="border-width: 1.5px; background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.2);">
+                <div class="btn-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <span>Reporte de Ganancias</span>
             </a>
         </div>
     </div>

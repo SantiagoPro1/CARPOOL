@@ -24,8 +24,8 @@
     @endif
 
     @if($vehiculos->isEmpty())
-        <div class="card text-center" style="border-left: 4px solid var(--blue-primary);">
-            <svg style="color: var(--blue-primary); margin-bottom: 12px;" width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+        <div class="card text-center" style="border-left: 4px solid var(--blue-primary); padding: 40px 20px;">
+            <img src="{{ asset('img/trips_empty.png') }}" alt="Registra tu vehículo" style="width: 140px; height: 140px; object-fit: cover; border-radius: 20px; margin: 0 auto 20px; display: block; opacity: 0.85;">
             <h3 style="margin-bottom: 8px;">Vehículo Requerido</h3>
             <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 16px;">Para publicar un viaje, primero necesitas registrar el vehículo que vas a conducir.</p>
             <a href="{{ route('vehiculos.create') }}" class="btn">Registrar Mi Vehículo</a>

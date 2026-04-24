@@ -2,9 +2,14 @@
 
 @section('content')
 <div class="animate-up">
-    <div style="margin-bottom: 32px;">
-        <h1 class="text-gradient" style="font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em;">Buscar Aventón</h1>
-        <p style="color: var(--text-muted); font-size: 0.9rem;">Encuentra compañeros para tu próximo viaje</p>
+    <div style="margin-bottom: 32px; display: flex; align-items: center; gap: 16px;">
+        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #2563eb, #1d4ed8); border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); flex-shrink: 0;">
+            <svg width="26" height="26" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        </div>
+        <div>
+            <h1 class="text-gradient" style="font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em;">Buscar Aventón</h1>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Encuentra compañeros para tu próximo viaje</p>
+        </div>
     </div>
 
 
@@ -53,8 +58,10 @@
     <h3 style="font-size: 1.25rem; margin-top: 32px; margin-bottom: 16px;">Resultados encontrados ({{ $viajes->count() }})</h3>
     
     @if($viajes->isEmpty())
-        <div class="card text-center">
-            <p style="color: var(--text-muted); margin-bottom: 0;">No se encontraron viajes disponibles con estos filtros.</p>
+        <div class="card text-center" style="padding: 40px 20px;">
+            <img src="{{ asset('img/search_empty.png') }}" alt="Sin resultados" style="width: 160px; height: 160px; object-fit: cover; border-radius: 20px; margin: 0 auto 20px; display: block; opacity: 0.8;">
+            <h4 style="margin-bottom: 8px; font-weight: 700;">No se encontraron viajes</h4>
+            <p style="color: var(--text-muted); margin-bottom: 0; font-size: 0.9rem;">Intenta con otros filtros o vuelve más tarde. ¡Siempre hay nuevos viajes apareciendo!</p>
         </div>
     @else
         @foreach($viajes as $viaje)
