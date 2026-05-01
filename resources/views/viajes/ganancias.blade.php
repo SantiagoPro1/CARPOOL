@@ -4,13 +4,13 @@
 <div class="animate-up">
     <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
         <a href="{{ route('viajes.index') }}" style="color: var(--text-muted); text-decoration: none; padding: 8px;">&larr; Volver a Viajes</a>
-        <h2 style="font-size: 1.5rem; margin: 0;">Reporte de Ganancias</h2>
+        <h2 style="font-size: 1.5rem; margin: 0;">Mis Ingresos</h2>
     </div>
 
     <!-- Header / Total Banner -->
     <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.3) 100%); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 20px; padding: 30px; text-align: center; margin-bottom: 30px; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);">
         <img src="{{ asset('img/earnings_hero.png') }}" alt="Ganancias" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; margin: 0 auto 16px; display: block; border: 3px solid rgba(16, 185, 129, 0.3); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.2);">
-        <p style="color: var(--text-main); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Ganancias Totales</p>
+        <p style="color: var(--text-main); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Ingresos Totales</p>
         <h1 style="font-size: 3.5rem; font-weight: 800; color: #10b981; margin: 0; line-height: 1;">${{ number_format($gananciasTotales, 2) }}</h1>
         <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem; margin-top: 12px;">Basado en el período seleccionado</p>
     </div>
@@ -39,9 +39,9 @@
         
         @if($viajesTerminados->isEmpty())
             <div class="card text-center" style="padding: 40px 20px; border-style: dashed; border-color: rgba(16, 185, 129, 0.2); background: transparent;">
-                <img src="{{ asset('img/earnings_hero.png') }}" alt="Sin ganancias" style="width: 140px; height: 140px; object-fit: cover; border-radius: 20px; margin: 0 auto 20px; display: block; opacity: 0.8;">
+                <img src="{{ asset('img/earnings_hero.png') }}" alt="Sin ingresos" style="width: 140px; height: 140px; object-fit: cover; border-radius: 20px; margin: 0 auto 20px; display: block; opacity: 0.8;">
                 <h4 style="margin-bottom: 8px;">No hay ingresos en este período</h4>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Finaliza viajes para ver tus ganancias aquí.</p>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Finaliza viajes para ver tus ingresos aquí.</p>
             </div>
         @else
             <div style="display: grid; gap: 16px;">

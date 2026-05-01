@@ -206,12 +206,26 @@
                 @foreach($viajesPasajero as $viaje)
                     <div class="card" style="border-left: 4px solid var(--accent-vivid);">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-                            <div>
+                            <div style="flex: 1;">
                                 <span style="font-size: 0.7rem; font-weight: 800; color: var(--accent-vivid); text-transform: uppercase;">ACOMPAÑANTE</span>
                                 <h3 style="font-size: 1.2rem; margin: 4px 0;">{{ $viaje->ruta->origen->Nombre }} &rarr; {{ $viaje->ruta->destino->Nombre }}</h3>
-                                <p style="color: var(--text-muted); font-size: 0.85rem;">Conductor: <strong>{{ $viaje->conductor->NombreCompleto }}</strong></p>
+                                <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px;">
+                                    <div style="display: flex; align-items: center; gap: 4px; color: var(--text-muted); font-size: 0.8rem;">
+                                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        {{ \Carbon\Carbon::parse($viaje->FechaSalida)->format('d M Y') }}
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 4px; color: var(--text-muted); font-size: 0.8rem;">
+                                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        {{ \Carbon\Carbon::parse($viaje->FechaSalida)->format('h:i A') }}
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 4px; color: #10b981; font-size: 0.8rem; font-weight: 600;">
+                                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        ${{ number_format($viaje->PrecioPorPasajero, 2) }}
+                                    </div>
+                                </div>
+                                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 8px;">Conductor: <strong>{{ $viaje->conductor->NombreCompleto }}</strong></p>
                             </div>
-                            <span style="font-size: 0.75rem; font-weight: 700; padding: 6px 12px; border-radius: 12px; background: var(--accent-subtle); color: var(--accent-vivid);">
+                            <span style="font-size: 0.75rem; font-weight: 700; padding: 6px 12px; border-radius: 12px; background: var(--accent-subtle); color: var(--accent-vivid); flex-shrink: 0; margin-left: 8px;">
                                 {{ $viaje->estado->NombreEstado ?? 'Confirmado' }}
                             </span>
                         </div>
